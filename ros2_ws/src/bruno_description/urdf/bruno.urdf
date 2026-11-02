@@ -1,0 +1,117 @@
+<?xml version="1.0"?>
+<!--
+  Bruno 2.0 chassis frame model.
+
+  All joint origins describing where sensors/footprint sit relative to
+  base_link are PLACEHOLDER estimates, not measured values - no physical
+  chassis dimensions have been recorded anywhere in this project yet.
+  The one exception is the base_link -> laser_frame offset (0.08 0 0.12),
+  which matches the static transform already verified live against the
+  real LD14P mount in bruno_bringup / ldlidar_stl_ros2's ld14p.launch.py.
+  Re-measure and correct the rest before trusting them for navigation.
+-->
+<robot name="bruno">
+
+  <material name="chassis_grey">
+    <color rgba="0.5 0.5 0.5 1.0"/>
+  </material>
+  <material name="sensor_black">
+    <color rgba="0.1 0.1 0.1 1.0"/>
+  </material>
+
+  <!-- base_footprint: ground-projection frame, placeholder height below base_link -->
+  <link name="base_footprint"/>
+
+  <joint name="base_footprint_joint" type="fixed">
+    <parent link="base_footprint"/>
+    <child link="base_link"/>
+    <!-- Placeholder chassis ground clearance; not measured. -->
+    <origin xyz="0 0 0.05" rpy="0 0 0"/>
+  </joint>
+
+  <!-- base_link: chassis body. Box dimensions are a placeholder visual proxy. -->
+  <link name="base_link">
+    <visual>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <geometry>
+        <box size="0.25 0.18 0.10"/>
+      </geometry>
+      <material name="chassis_grey"/>
+    </visual>
+    <collision>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <geometry>
+        <box size="0.25 0.18 0.10"/>
+      </geometry>
+    </collision>
+  </link>
+
+  <!-- laser_frame: verified offset, matches ld14p.launch.py's static TF -->
+  <link name="laser_frame">
+    <visual>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <geometry>
+        <cylinder radius="0.035" length="0.04"/>
+      </geometry>
+      <material name="sensor_black"/>
+    </visual>
+  </link>
+
+  <joint name="laser_joint" type="fixed">
+    <parent link="base_link"/>
+    <child link="laser_frame"/>
+    <origin xyz="0.08 0 0.12" rpy="0 0 0"/>
+  </joint>
+
+  <!-- Sonar array: -30 / 0 / +30 degrees, front of chassis.
+       xyz offsets are placeholder front-mount estimates; rpy yaw values
+       are the requested -0.5236 / 0 / +0.5236 rad (-30/0/+30 deg). -->
+  <link name="sonar_left_link">
+    <visual>
+      <origin xyz="0 0 0" rpy="0 1.5708 0"/>
+      <geometry>
+        <cylinder radius="0.008" length="0.02"/>
+      </geometry>
+      <material name="sensor_black"/>
+    </visual>
+  </link>
+
+  <joint name="sonar_left_joint" type="fixed">
+    <parent link="base_link"/>
+    <child link="sonar_left_link"/>
+    <origin xyz="0.12 0.06 0.02" rpy="0 0 -0.5236"/>
+  </joint>
+
+  <link name="sonar_center_link">
+    <visual>
+      <origin xyz="0 0 0" rpy="0 1.5708 0"/>
+      <geometry>
+        <cylinder radius="0.008" length="0.02"/>
+      </geometry>
+      <material name="sensor_black"/>
+    </visual>
+  </link>
+
+  <joint name="sonar_center_joint" type="fixed">
+    <parent link="base_link"/>
+    <child link="sonar_center_link"/>
+    <origin xyz="0.125 0 0.02" rpy="0 0 0"/>
+  </joint>
+
+  <link name="sonar_right_link">
+    <visual>
+      <origin xyz="0 0 0" rpy="0 1.5708 0"/>
+      <geometry>
+        <cylinder radius="0.008" length="0.02"/>
+      </geometry>
+      <material name="sensor_black"/>
+    </visual>
+  </link>
+
+  <joint name="sonar_right_joint" type="fixed">
+    <parent link="base_link"/>
+    <child link="sonar_right_link"/>
+    <origin xyz="0.12 -0.06 0.02" rpy="0 0 0.5236"/>
+  </joint>
+
+</robot>

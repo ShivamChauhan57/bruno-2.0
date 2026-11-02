@@ -1,5 +1,8 @@
 #!/usr/bin/env python3
 from launch import LaunchDescription
+from launch.actions import DeclareLaunchArgument
+from launch.conditions import IfCondition
+from launch.substitutions import LaunchConfiguration
 from launch_ros.actions import Node
 
 '''
@@ -26,6 +29,12 @@ Parameter Description:
 '''
 
 def generate_launch_description():
+  # Set to false when base_link -> laser_frame is already published elsewhere
+  # (e.g. by robot_state_publisher from a URDF, as in bruno_bringup) to avoid
+  # two publishers broadcasting the same static transform.
+  publish_static_tf_arg = DeclareLaunchArgument(
+      'publish_static_tf', default_value='true')
+
   # LDROBOT LiDAR publisher node
   ldlidar_node = Node(
       package='ldlidar_stl_ros2',
@@ -54,12 +63,14 @@ def generate_launch_description():
       '--x', '0.08', '--y', '0.0', '--z', '0.12',
       '--yaw', '0', '--pitch', '0', '--roll', '0',
       '--frame-id', 'base_link', '--child-frame-id', 'laser_frame'
-    ]
+    ],
+    condition=IfCondition(LaunchConfiguration('publish_static_tf'))
   )
 
   # Define LaunchDescription variable
   ld = LaunchDescription()
 
+  ld.add_action(publish_static_tf_arg)
   ld.add_action(ldlidar_node)
   ld.add_action(base_link_to_laser_tf_node)
 
