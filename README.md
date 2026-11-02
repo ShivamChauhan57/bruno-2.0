@@ -1,4 +1,4 @@
-# Bruno Robot
+# Bruno 2.0
 
 Ground differential-drive robot: ESP32 base controller + L298N drivetrain, LD14P LiDAR, and a 3-sonar front array, bridged to ROS 2 Jazzy on an onboard x86 host.
 
