@@ -3,7 +3,7 @@
 <package format="3">
   <name>bruno_bringup</name>
   <version>0.0.0</version>
-  <description>Master bringup launch file for Bruno 2.0: robot_state_publisher, LD14P LiDAR driver, ESP32 base controller bridge, and rf2o laser odometry</description>
+  <description>Master bringup launch file for Bruno 2.0: robot_state_publisher, LD14P LiDAR driver, ESP32 base controller bridge, rf2o laser odometry, and a mapping launch adding slam_toolbox + foxglove_bridge</description>
   <maintainer email="shivamchauhan3957@gmail.com">bruno</maintainer>
   <license>MIT</license>
 
@@ -13,6 +13,8 @@
   <exec_depend>ldlidar_stl_ros2</exec_depend>
   <exec_depend>bruno_base</exec_depend>
   <exec_depend>rf2o_laser_odometry</exec_depend>
+  <exec_depend>slam_toolbox</exec_depend>
+  <exec_depend>foxglove_bridge</exec_depend>
   <exec_depend>ros2launch</exec_depend>
 
   <test_depend>ament_lint_auto</test_depend>
